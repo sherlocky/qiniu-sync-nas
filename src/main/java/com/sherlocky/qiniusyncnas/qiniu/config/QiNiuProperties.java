@@ -17,16 +17,16 @@ public class QiNiuProperties {
     /**
      * 七牛云的密钥
      */
-    private String accessKey = "access-key";
-    private String secretKey = "secret-key";
+    private String accessKey;
+    private String secretKey;
     /**
      * 存储空间名字
      */
-    private String bucketName = "bucket-name";
+    private String bucketName;
     /**
      * 一般设置为cdn
      */
-    private String cdnPrefix = "cdn";
+    private String cdnPrefix;
 
     public String getAccessKey() {
         return accessKey;
