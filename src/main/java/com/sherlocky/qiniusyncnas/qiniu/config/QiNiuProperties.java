@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * <p>默认情况下，如果只使用 @ConfigurationProperties 注解，是没有把当前类注册成为一个 Bean 的</p>
  * <p>此时可以配合使用 @Component 注解 直接进行注入</p>
  * <p>或者在使用了 @Configuration 注解 的类上添加 @EnableConfigurationProperties 注解</p>
+ * <p>又或者使用 @Bean 方式在标有 @Configuration 的类进行注入, 这种方式通常可以用在对第三方类进行配置属性注册</p>
  */
 @ConfigurationProperties(prefix = "qiniu")
 public class QiNiuProperties {
