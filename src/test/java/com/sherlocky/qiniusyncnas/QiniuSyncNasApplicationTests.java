@@ -1,6 +1,6 @@
 package com.sherlocky.qiniusyncnas;
 
-import cn.yunlingfly.qiniuspringbootstarter.api.service.IQiniuService;
+import com.sherlocky.qiniusyncnas.service.IQiniuService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class QiniuSyncNasApplicationTests {
 
     @Test
     public void contextLoads() {
-
+        System.out.println(qiniuService);
     }
 
 }
