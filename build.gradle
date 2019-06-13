@@ -36,14 +36,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    implementation 'cn.yunlingfly:qiniu-spring-boot-starter:0.2-RELEASE'
     implementation 'com.qiniu:qiniu-java-sdk:[7.2.0, 7.2.99]'
     implementation 'com.alibaba:fastjson:1.2.47'
-
     implementation 'org.apache.commons:commons-lang3:3.8.1'
 
     compileOnly 'org.projectlombok:lombok'
+
     annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
