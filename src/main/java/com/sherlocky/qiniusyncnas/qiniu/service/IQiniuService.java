@@ -1,7 +1,8 @@
-package com.sherlocky.qiniusyncnas.service;
+package com.sherlocky.qiniusyncnas.qiniu.service;
 
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
+import com.qiniu.storage.model.FileListing;
 
 import java.io.File;
 
@@ -41,6 +42,24 @@ public interface IQiniuService {
      * @throws QiniuException 抛出QiniuException异常
      */
     void deleteFile(String key) throws QiniuException;
+
+    /**
+     * 列举空间文件列表
+     *
+     * @param limit 最大支持到1000
+     * @return
+     */
+    FileListing listFile(String marker, int limit) throws QiniuException;
+
+    /**
+     * 列举空间文件列表
+     *
+     * @param prefix
+     * @param limit 最大支持到1000
+     * @param delimiter
+     * @return
+     */
+    FileListing listFile(String prefix, String marker, int limit, String delimiter) throws QiniuException;
 
     /**
      * 获取上传token

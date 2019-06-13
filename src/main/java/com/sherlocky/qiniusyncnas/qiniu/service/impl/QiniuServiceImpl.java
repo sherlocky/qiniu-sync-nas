@@ -1,15 +1,15 @@
-package com.sherlocky.qiniusyncnas.service.impl;
+package com.sherlocky.qiniusyncnas.qiniu.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.UploadManager;
+import com.qiniu.storage.model.FileListing;
 import com.qiniu.util.Auth;
 import com.sherlocky.qiniusyncnas.qiniu.config.QiNiuProperties;
-import com.sherlocky.qiniusyncnas.service.IQiniuService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.sherlocky.qiniusyncnas.qiniu.service.IQiniuService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +20,10 @@ import java.io.File;
  * service实现类
  */
 
+@Slf4j
 @Service
 public class QiniuServiceImpl implements IQiniuService {
-    private static final Logger logger = LoggerFactory.getLogger(QiniuServiceImpl.class);
-
+    //private static final Logger logger = LoggerFactory.getLogger(QiniuServiceImpl.class);
     @Autowired
     private UploadManager uploadManager;
     @Autowired
@@ -75,6 +75,16 @@ public class QiniuServiceImpl implements IQiniuService {
         bucketManager.delete(qiNiuProperties.getBucketName(), key);
     }
 
+    @Override
+    public FileListing listFile(String marker, int limit) throws QiniuException {
+        return listFile(null, marker, limit, null);
+    }
+
+    @Override
+    public FileListing listFile(String prefix, String marker, int limit, String delimiter) throws QiniuException {
+        return bucketManager.listFilesV2(qiNiuProperties.getBucketName(), prefix, marker, limit, delimiter);
+    }
+
     /**
      * 获取上传凭证，普通上传
      */
@@ -95,6 +105,6 @@ public class QiniuServiceImpl implements IQiniuService {
      */
     @PostConstruct
     public void init() {
-        logger.info("qiNiuProperties: {}", JSON.toJSONString(qiNiuProperties));
+        log.info("qiNiuProperties: {}", JSON.toJSONString(qiNiuProperties));
     }
 }
