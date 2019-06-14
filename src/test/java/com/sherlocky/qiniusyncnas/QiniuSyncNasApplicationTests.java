@@ -2,11 +2,16 @@ package com.sherlocky.qiniusyncnas;
 
 import com.alibaba.fastjson.JSON;
 import com.qiniu.common.QiniuException;
+import com.qiniu.storage.BucketManager;
+import com.qiniu.storage.model.BucketInfo;
 import com.qiniu.storage.model.FileInfo;
 import com.qiniu.storage.model.FileListing;
+import com.sherlocky.qiniusyncnas.entity.SyncResult;
+import com.sherlocky.qiniusyncnas.qiniu.config.QiNiuProperties;
 import com.sherlocky.qiniusyncnas.qiniu.service.IQiniuService;
 import com.sherlocky.qiniusyncnas.service.QiniuSyncNasService;
 import com.sherlocky.qiniusyncnas.util.FileUtils;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +31,21 @@ public class QiniuSyncNasApplicationTests {
     private IQiniuService qiniuService;
     @Autowired
     private QiniuSyncNasService qiniuSyncNasService;
+    @Autowired
+    private BucketManager bucketManager;
+    @Autowired
+    private QiNiuProperties qiNiuProperties;
 
     @Test
-    public void contextLoads() {
-        System.out.println(qiniuService);
+    public void testBucketManager() {
+        try {
+            BucketInfo bi = bucketManager.getBucketInfo(qiNiuProperties.getBucketName());
+            System.out.println(JSON.toJSONString(bi));
+            String[] ds = bucketManager.domainList(qiNiuProperties.getBucketName());
+            System.out.println(JSON.toJSONString(ds));
+        } catch (QiniuException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -63,8 +79,9 @@ public class QiniuSyncNasApplicationTests {
 
     @Test
     public void testSync() {
-        long count = qiniuSyncNasService.sync();
-        System.out.println("### 本次成功同步了 " + count + " 个文件~");
+        SyncResult r = qiniuSyncNasService.sync();
+        Assert.assertNotNull(r);
+        System.out.println("### 共有 " + r.getTotalCount() + " 个文件，本次成功同步了 " + r.getSuccessCount() + " 个~");
     }
 
     @Test

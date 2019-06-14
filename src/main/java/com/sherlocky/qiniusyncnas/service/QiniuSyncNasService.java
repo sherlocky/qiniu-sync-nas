@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.qiniu.common.QiniuException;
 import com.qiniu.storage.model.FileInfo;
 import com.qiniu.storage.model.FileListing;
+import com.sherlocky.qiniusyncnas.entity.SyncResult;
 import com.sherlocky.qiniusyncnas.qiniu.service.IQiniuService;
 import com.sherlocky.qiniusyncnas.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +40,7 @@ public class QiniuSyncNasService {
      * 同步七牛OSS文件
      * @return count 同步文件的总个数
      */
-    public long sync() {
+    public SyncResult sync() {
         FileListing fl = null;
         String marker = null;
         boolean isEOF = false;
@@ -56,7 +57,7 @@ public class QiniuSyncNasService {
         } catch (QiniuException e) {
             log.error("$$$$$$ 从七牛获取空间文件列表失败", e);
         }
-        return successCount;
+        return new SyncResult(totalCount, successCount);
     }
 
     private long handleSync(FileListing fileListing) {
