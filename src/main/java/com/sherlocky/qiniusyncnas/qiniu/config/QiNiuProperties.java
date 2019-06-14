@@ -24,6 +24,10 @@ public class QiNiuProperties {
      */
     private String bucketName;
     /**
+     * 存储空间外链域名
+     */
+    private String bucketDomain;
+    /**
      * 一般设置为cdn
      */
     private String cdnPrefix;
@@ -50,6 +54,14 @@ public class QiNiuProperties {
 
     public void setBucketName(String bucketName) {
         this.bucketName = bucketName;
+    }
+
+    public String getBucketDomain() {
+        return bucketDomain;
+    }
+
+    public void setBucketDomain(String bucketDomain) {
+        this.bucketDomain = bucketDomain;
     }
 
     public String getCdnPrefix() {

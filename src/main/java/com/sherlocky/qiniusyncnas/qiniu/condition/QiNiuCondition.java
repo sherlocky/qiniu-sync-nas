@@ -2,26 +2,26 @@ package com.sherlocky.qiniusyncnas.qiniu.condition;
 
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
+import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.util.StringUtils;
 
 /**
  * 校验类
+ * <p>此处使用 Condition 实现，并不优美。。</p>
  */
-
 public class QiNiuCondition implements Condition {
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-        String ak = context.getEnvironment().getProperty("qiniu.access-key");
-        String sk = context.getEnvironment().getProperty("qiniu.secret-key");
-        String bucketName = context.getEnvironment().getProperty("qiniu.bucket-name");
-
-        if (StringUtils.isEmpty(ak)) {
-            throw new RuntimeException("Lack of qiniuyun configuration:access-key");
-        } else if (StringUtils.isEmpty(sk)) {
-            throw new RuntimeException("Lack of qiniuyun configuration:qiniu.secret-key");
-        } else if (StringUtils.isEmpty(bucketName)) {
-            throw new RuntimeException("Lack of qiniuyun configuration:qiniu.bucket-name");
+        Environment env = context.getEnvironment();
+        if (StringUtils.isEmpty(env.getProperty("qiniu.access-key"))) {
+            throw new RuntimeException("Lack of qiniuyun configuration: qiniu.access-key");
+        } else if (StringUtils.isEmpty(env.getProperty("qiniu.secret-key"))) {
+            throw new RuntimeException("Lack of qiniuyun configuration: qiniu.secret-key");
+        } else if (StringUtils.isEmpty(env.getProperty("qiniu.bucket-name"))) {
+            throw new RuntimeException("Lack of qiniuyun configuration: qiniu.bucket-name");
+        } else if (StringUtils.isEmpty(env.getProperty("qiniu.bucket-domain"))) {
+            throw new RuntimeException("Lack of qiniuyun configuration: qiniu.bucket-domain");
         } else {
             return true;
         }
