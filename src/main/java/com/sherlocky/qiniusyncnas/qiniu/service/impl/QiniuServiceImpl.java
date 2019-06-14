@@ -10,6 +10,8 @@ import com.qiniu.util.Auth;
 import com.sherlocky.qiniusyncnas.qiniu.config.QiNiuProperties;
 import com.sherlocky.qiniusyncnas.qiniu.service.IQiniuService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -87,19 +89,35 @@ public class QiniuServiceImpl implements IQiniuService {
         return bucketManager.listFilesV2(qiNiuProperties.getBucketName(), prefix, marker, limit, delimiter);
     }
 
+    @Override
+    public String getDomain() {
+        String[] domains = null;
+        try {
+            domains = bucketManager.domainList(qiNiuProperties.getBucketName());
+        } catch (QiniuException e) {
+            log.error("$$$$$$ 获取域名列表失败！", e);
+        }
+        if (ArrayUtils.isEmpty(domains)) {
+            return null;
+        }
+        return StringUtils.prependIfMissing(domains[0], "http://");
+    }
+
+    @Override
+    public String getDownloadUrl(String fileKey) {
+        String domain = this.getDomain();
+        Assert.notNull(domain, "$$$ 外链域名不能为 null！");
+        Assert.notNull(fileKey, "$$$ 文件 key 不能为 null！");
+        String downloadUrl = String.format("%s/%s", domain, fileKey);
+        return downloadUrl.startsWith("http") ? downloadUrl : ("http://" + downloadUrl);
+    }
+
     /**
      * 获取上传凭证，普通上传
      */
     @Override
     public String getUploadToken() {
         return this.auth.uploadToken(qiNiuProperties.getBucketName());
-    }
-
-    @Override
-    public String getDownloadUrl(String fileKey) {
-        Assert.notNull(fileKey, "### 文件key不能为：null！");
-        String downloadUrl = String.format("%s/%s", qiNiuProperties.getBucketDomain(), fileKey);
-        return downloadUrl.startsWith("http") ? downloadUrl : ("http://" + downloadUrl);
     }
 
     /**

@@ -62,6 +62,13 @@ public interface IQiniuService {
     FileListing listFile(String prefix, String marker, int limit, String delimiter) throws QiniuException;
 
     /**
+     * 获取外链域名
+     *
+     * @return
+     */
+    String getDomain();
+
+    /**
      * 获取文件下载路径
      *
      * @param fileKey
