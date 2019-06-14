@@ -62,6 +62,14 @@ public interface IQiniuService {
     FileListing listFile(String prefix, String marker, int limit, String delimiter) throws QiniuException;
 
     /**
+     * 获取文件下载路径
+     *
+     * @param fileKey
+     * @return
+     */
+    String getDownloadUrl(String fileKey);
+
+    /**
      * 获取上传token
      * <p>获取token</p>
      *

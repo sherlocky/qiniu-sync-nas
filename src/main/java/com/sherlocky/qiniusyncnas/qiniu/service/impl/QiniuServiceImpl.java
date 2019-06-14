@@ -12,6 +12,7 @@ import com.sherlocky.qiniusyncnas.qiniu.service.IQiniuService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
@@ -23,7 +24,6 @@ import java.io.File;
 @Slf4j
 @Service
 public class QiniuServiceImpl implements IQiniuService {
-    //private static final Logger logger = LoggerFactory.getLogger(QiniuServiceImpl.class);
     @Autowired
     private UploadManager uploadManager;
     @Autowired
@@ -40,7 +40,9 @@ public class QiniuServiceImpl implements IQiniuService {
         if (existed) {
             response = this.uploadManager.put(file, key, getUploadToken(key));
         } else {
-            System.out.println("使用文件上传");
+            if (log.isDebugEnabled()) {
+                log.debug("### 使用文件上传");
+            }
             response = this.uploadManager.put(file, key, getUploadToken());
             int retry = 0;
             while (response.needRetry() && retry < 3) {
@@ -91,6 +93,13 @@ public class QiniuServiceImpl implements IQiniuService {
     @Override
     public String getUploadToken() {
         return this.auth.uploadToken(qiNiuProperties.getBucketName());
+    }
+
+    @Override
+    public String getDownloadUrl(String fileKey) {
+        Assert.notNull(fileKey, "### 文件key不能为：null！");
+        String downloadUrl = String.format("%s/%s", qiNiuProperties.getBucketDomain(), fileKey);
+        return downloadUrl.startsWith("http") ? downloadUrl : ("http://" + downloadUrl);
     }
 
     /**
