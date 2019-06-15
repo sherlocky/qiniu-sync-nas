@@ -108,8 +108,8 @@ public class QiniuServiceImpl implements IQiniuService {
         String domain = this.getDomain();
         Assert.notNull(domain, "$$$ 外链域名不能为 null！");
         Assert.notNull(fileKey, "$$$ 文件 key 不能为 null！");
-        String downloadUrl = String.format("%s/%s", domain, fileKey);
-        return downloadUrl.startsWith("http") ? downloadUrl : ("http://" + downloadUrl);
+        // 添加时间戳参数，覆盖缓存，取最新的文件
+        return String.format("%s/%s?time=%s", domain, fileKey, System.currentTimeMillis());
     }
 
     /**
