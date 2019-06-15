@@ -8,10 +8,10 @@ import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.FileListing;
 import com.qiniu.util.Auth;
 import com.sherlocky.qiniusyncnas.qiniu.config.QiNiuProperties;
+import com.sherlocky.qiniusyncnas.qiniu.constant.QiNiuConstants;
 import com.sherlocky.qiniusyncnas.qiniu.service.IQiniuService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -100,7 +100,7 @@ public class QiniuServiceImpl implements IQiniuService {
         if (ArrayUtils.isEmpty(domains)) {
             return null;
         }
-        return StringUtils.prependIfMissing(domains[0], "http://");
+        return String.format("%s%s%s", qiNiuProperties.getCdnSchema(), QiNiuConstants.SCHEMA_SEPARATOR, domains[0]);
     }
 
     @Override
@@ -109,7 +109,7 @@ public class QiniuServiceImpl implements IQiniuService {
         Assert.notNull(domain, "$$$ 外链域名不能为 null！");
         Assert.notNull(fileKey, "$$$ 文件 key 不能为 null！");
         // 添加时间戳参数，覆盖缓存，取最新的文件
-        return String.format("%s/%s?time=%s", domain, fileKey, System.currentTimeMillis());
+        return String.format("%s/%s", domain, fileKey);
     }
 
     /**
