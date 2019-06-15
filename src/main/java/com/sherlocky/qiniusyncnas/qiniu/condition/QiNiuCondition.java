@@ -20,8 +20,6 @@ public class QiNiuCondition implements Condition {
             throw new RuntimeException("Lack of qiniuyun configuration: qiniu.secret-key");
         } else if (StringUtils.isEmpty(env.getProperty("qiniu.bucket-name"))) {
             throw new RuntimeException("Lack of qiniuyun configuration: qiniu.bucket-name");
-        } else if (StringUtils.isEmpty(env.getProperty("qiniu.bucket-domain"))) {
-            throw new RuntimeException("Lack of qiniuyun configuration: qiniu.bucket-domain");
         } else {
             return true;
         }
