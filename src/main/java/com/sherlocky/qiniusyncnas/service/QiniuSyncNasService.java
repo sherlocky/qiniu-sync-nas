@@ -5,8 +5,9 @@ import com.qiniu.common.QiniuException;
 import com.qiniu.storage.model.FileInfo;
 import com.qiniu.storage.model.FileListing;
 import com.sherlocky.qiniusyncnas.entity.SyncResult;
+import com.sherlocky.qiniusyncnas.qiniu.config.QiNiuProperties;
 import com.sherlocky.qiniusyncnas.qiniu.service.IQiniuService;
-import com.sherlocky.qiniusyncnas.util.FileUtils;
+import com.sherlocky.qiniusyncnas.util.QiniuFileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -26,6 +27,8 @@ import java.util.Arrays;
 public class QiniuSyncNasService {
     @Autowired
     private IQiniuService qiniuService;
+    @Autowired
+    private QiNiuProperties qiNiuProperties;
     /** 每次迭代的长度限制，推荐值 1000 */
     @Value("${sync.qiniu.prefix:}")
     private String prefix;
@@ -57,6 +60,8 @@ public class QiniuSyncNasService {
         } catch (QiniuException e) {
             log.error("$$$$$$ 从七牛获取空间文件列表失败", e);
         }
+        log.error(JSON.toJSONString(qiNiuProperties));
+        log.error("### 当前存储空间共有 " + totalCount + " 个文件，本次成功同步了 " + successCount + " 个~");
         return new SyncResult(totalCount, successCount);
     }
 
@@ -68,10 +73,6 @@ public class QiniuSyncNasService {
         if (ArrayUtils.isEmpty(fis)) {
             return 0;
         }
-        /**
-         Arrays.stream(fis).forEach((fileInfo) -> {
-         downloadFile(fileInfo);
-         });*/
         // 返回成功下载的个数
         return Arrays.stream(fis).filter((fileInfo) -> {
             return downloadFile(fileInfo);
@@ -91,6 +92,6 @@ public class QiniuSyncNasService {
             log.debug("### 文件 " + fileInfo.key + " -> " + fileDownloadUrl);
         }
         // 将文件下载写入到磁盘（按照七牛路径格式，以 / 分隔目录层级）
-        return FileUtils.downloadFile(fileDownloadUrl, fileInfo.key, fileInfo.fsize);
+        return QiniuFileUtils.downloadFile(fileDownloadUrl, fileInfo.key, fileInfo.fsize, fileInfo.putTime);
     }
 }

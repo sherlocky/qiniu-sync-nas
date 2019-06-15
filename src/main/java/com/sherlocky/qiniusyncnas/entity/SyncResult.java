@@ -14,4 +14,8 @@ public class SyncResult {
     private long totalCount;
     /** 同步成功文件个数 */
     private long successCount;
+
+    public boolean isSuccess() {
+        return totalCount > 0 && successCount > 0;
+    }
 }
