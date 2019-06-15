@@ -10,7 +10,7 @@ import com.sherlocky.qiniusyncnas.entity.SyncResult;
 import com.sherlocky.qiniusyncnas.qiniu.config.QiNiuProperties;
 import com.sherlocky.qiniusyncnas.qiniu.service.IQiniuService;
 import com.sherlocky.qiniusyncnas.service.QiniuSyncNasService;
-import com.sherlocky.qiniusyncnas.util.FileUtils;
+import com.sherlocky.qiniusyncnas.util.QiniuFileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -68,7 +68,7 @@ public class QiniuSyncNasApplicationTests {
                 System.out.println(JSON.toJSONString(fl));
                 FileInfo[] fis = fl.items;
                 Arrays.stream(fis).forEach((fileInfo) -> {
-                    System.out.println(FileUtils.getFilePath(fileInfo.key));
+                    System.out.println(QiniuFileUtils.getFilePath(fileInfo.key));
                 });
             }
         } catch (QiniuException e) {
@@ -81,19 +81,25 @@ public class QiniuSyncNasApplicationTests {
     public void testSync() {
         SyncResult r = qiniuSyncNasService.sync();
         Assert.assertNotNull(r);
-        System.out.println("### 共有 " + r.getTotalCount() + " 个文件，本次成功同步了 " + r.getSuccessCount() + " 个~");
     }
 
     @Test
     public void testFileUtilsGetLocation() {
-        System.out.println(FileUtils.getLocationPath());
+        System.out.println(QiniuFileUtils.getLocationPath());
     }
 
     @Test
     public void testFileUtilsDownload() throws IOException {
-        String fileKey = "/learning/java/阿里巴巴Java开发手册-1.3.0.pdf";
-        long fileSize = 1056487;
-        boolean isSuccess = FileUtils.downloadFile(qiniuService.getDownloadUrl(fileKey), fileKey, fileSize);
-        System.out.println("下载成功~" + FileUtils.getFilePath(fileKey));
+        String fileKey = "f/3e/cc3cf5b3902dbb1ff2356fe65e67e.png";
+        long fileSize = 124925;
+        long filePutTime = 15094987913727947L;
+
+        //fileSize = 4695;
+        //fileKey = "static/autoc/js/autoc.min.js";
+        //filePutTime = 14608713791557831L;
+
+        String downloadUrl = qiniuService.getDownloadUrl(fileKey);
+        boolean isSuccess = QiniuFileUtils.downloadFile(downloadUrl, fileKey, fileSize, filePutTime);
+        System.out.println("下载成功~" + QiniuFileUtils.getFilePath(fileKey));
     }
 }
