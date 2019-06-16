@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 同步七牛文件到NAS本地
@@ -38,12 +39,19 @@ public class QiniuSyncNasService {
     private String delimiter;
     @Value("${sync.nas.location}")
     private String location;
+    /** 同步操作计数 */
+    private static AtomicInteger syncCount = new AtomicInteger(0);
 
     /**
      * 同步七牛OSS文件
      * @return count 同步文件的总个数
      */
     public SyncResult sync() {
+        // 计数器自增后，如果大于1，则表示有同步操作在进行中
+        if (syncCount.incrementAndGet() > 1) {
+            log.error("$$$$$$ 已有同步操作在进行中。");
+            return new SyncResult("同步进行中。");
+        }
         FileListing fl = null;
         String marker = null;
         boolean isEOF = false;
@@ -62,6 +70,8 @@ public class QiniuSyncNasService {
         }
         log.error(JSON.toJSONString(qiNiuProperties));
         log.error("### 当前存储空间共有 " + totalCount + " 个文件，本次成功同步了 " + successCount + " 个~");
+        // 同步结束：归0
+        syncCount.set(0);
         return new SyncResult(totalCount, successCount);
     }
 
