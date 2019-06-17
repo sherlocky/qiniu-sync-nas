@@ -70,7 +70,6 @@ public class SyncTask implements SchedulingConfigurer {
 
     @Value("${sync.cron:0 0 4 * * ?}")
     public void initCron(String cron) {
-        System.out.println("111111111111111111111111111111111");
         SyncTask.cron = cron;
     }
 }
