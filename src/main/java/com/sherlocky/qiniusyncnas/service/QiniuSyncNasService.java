@@ -37,8 +37,7 @@ public class QiniuSyncNasService {
     private Integer limit;
     @Value("${sync.qiniu.delimiter:}")
     private String delimiter;
-    @Value("${sync.nas.location}")
-    private String location;
+
     /** 同步操作计数 */
     private static AtomicInteger syncCount = new AtomicInteger(0);
 
@@ -99,7 +98,7 @@ public class QiniuSyncNasService {
             return false;
         }
         if (log.isDebugEnabled()) {
-            log.debug("### 文件 " + fileInfo.key + " -> " + fileDownloadUrl);
+            log.debug("### 文件： " + fileInfo.key + " -> " + fileDownloadUrl);
         }
         // 将文件下载写入到磁盘（按照七牛路径格式，以 / 分隔目录层级）
         return QiniuFileUtils.downloadFile(fileDownloadUrl, fileInfo.key, fileInfo.fsize, fileInfo.putTime);
