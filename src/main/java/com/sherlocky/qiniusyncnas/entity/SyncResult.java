@@ -1,9 +1,12 @@
 package com.sherlocky.qiniusyncnas.entity;
 
+import lombok.ToString;
+
 /**
  * @author: zhangcx
  * @date: 2019/6/14 22:55
  */
+@ToString
 public class SyncResult {
     /** 文件总个数 */
     private long totalCount;
