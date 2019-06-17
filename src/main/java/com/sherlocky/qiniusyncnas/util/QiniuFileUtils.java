@@ -98,8 +98,14 @@ public class QiniuFileUtils {
             }
         }
         try {
+            if (log.isDebugEnabled()) {
+                log.debug("@@@@@@ 开始下载：");
+            }
             // 设置 readTimeout 为 10 分钟
             org.apache.commons.io.FileUtils.copyURLToFile(new URL(downloadUrl), destFile, 60 * 1000, 600 * 1000);
+            if (log.isDebugEnabled()) {
+                log.debug("@@@@@@ 下载完成：");
+            }
         } catch (IOException e) {
             log.error("$$$ 下载七牛文件失败，下载地址 -> " + downloadUrl + " 路径：" + destFilePath, e);
         }
