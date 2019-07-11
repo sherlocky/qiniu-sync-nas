@@ -18,7 +18,7 @@
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
     <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
     <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
-    <property name="log_pattern" value="#${app_name}# %clr([%d{yyyy-MM-dd HH:mm:ss.SSS}]){faint} [%thread] %clr([%-5level]) %clr[%-60.60logger{60}:%-3line]{cyan} --%mdc{client} %msg%n%wEx"/>
+    <property name="log_pattern" value="#${app_name}# %clr([%d{yyyy-MM-dd HH:mm:ss.SSS}]){faint} [%thread] %clr([%-5level]) %clr([%-60.60logger{60}:%-3line]){cyan} --%mdc{client} %msg%n%wEx"/>
 
     <!-- Log Appender Begin -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
