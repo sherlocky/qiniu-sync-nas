@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.1.5.RELEASE'
+    id 'org.springframework.boot' version '2.1.6.RELEASE'
     id 'java'
 }
 
@@ -37,7 +37,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     implementation 'com.qiniu:qiniu-java-sdk:[7.2.0, 7.2.99]'
-    implementation 'com.alibaba:fastjson:1.2.47'
+    implementation 'com.alibaba:fastjson:1.2.58'
     implementation 'org.apache.commons:commons-lang3:3.8.1'
     implementation 'commons-io:commons-io:2.6'
     implementation 'commons-collections:commons-collections:3.2.2'
