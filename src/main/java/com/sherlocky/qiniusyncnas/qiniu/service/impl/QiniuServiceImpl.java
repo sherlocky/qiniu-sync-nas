@@ -5,6 +5,7 @@ import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.UploadManager;
+import com.qiniu.storage.model.BucketInfo;
 import com.qiniu.storage.model.FileListing;
 import com.qiniu.util.Auth;
 import com.sherlocky.qiniusyncnas.qiniu.config.QiNiuProperties;
@@ -18,11 +19,12 @@ import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * service实现类
  */
-
 @Slf4j
 @Service
 public class QiniuServiceImpl implements IQiniuService {
@@ -108,8 +110,29 @@ public class QiniuServiceImpl implements IQiniuService {
         String domain = this.getDomain();
         Assert.notNull(domain, "$$$ 外链域名不能为 null！");
         Assert.notNull(fileKey, "$$$ 文件 key 不能为 null！");
+        String encodedFileKey = fileKey;
+        try {
+            encodedFileKey = URLEncoder.encode(fileKey, "utf-8").replace("+", "%20");
+        } catch (UnsupportedEncodingException e) {
+            log.error(String.format("$$$ 文件key: %s转换编码错误!", fileKey), e);
+        }
         // 添加时间戳参数，覆盖缓存，取最新的文件
-        return String.format("%s/%s", domain, fileKey);
+        String publicUrl = String.format("%s/%s", domain, encodedFileKey);
+        BucketInfo bi = null;
+        try {
+            bi = bucketManager.getBucketInfo(qiNiuProperties.getBucketName());
+        } catch (QiniuException e) {
+            log.error("$$$ 获取七牛Bucket信息失败！", e);
+        }
+        // 公开空间
+        if (bi == null || QiNiuConstants.BUCKET_PUBLIC == bi.getPrivate()) {
+            return publicUrl;
+        }
+        /**
+         * 对于私有空间的文件，首先需要按照公开空间的文件访问方式构建对应的公开空间访问链接，然后再对这个链接进行私有授权签名
+         */
+        // 自定义链接过期时间: 5分钟（300秒）
+        return auth.privateDownloadUrl(publicUrl, 300);
     }
 
     /**
