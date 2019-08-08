@@ -82,7 +82,7 @@ public class QiniuFileUtils {
     public static boolean downloadFile(String downloadUrl, String relFilePath, long fileSize, long filePutTime) {
         Assert.notNull(downloadUrl, "$$$ downloadUrl 不能为 null！");
         String destFilePath = QiniuFileUtils.getFilePath(relFilePath);
-        // 下载后校验
+        // 下载前校验
         CheckResult result = QiniuFileUtils.checkFile(relFilePath, fileSize, filePutTime);
         if (CheckResult.EXISTS == result) {
             if (log.isInfoEnabled()) {
