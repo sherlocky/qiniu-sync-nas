@@ -260,7 +260,8 @@ public class QiniuFileUtils {
      * @return
      */
     public static boolean isSlimType(String fileKey) {
+        Assert.notNull(fileKey, "$$$ 文件 key 不能为 null！");
         String ext = FilenameUtils.getExtension(fileKey);
-        return ArrayUtils.contains(QiNiuConstants.CDN_PHOTO_SLIM_TYPES, ext);
+        return ArrayUtils.contains(QiNiuConstants.CDN_PHOTO_SLIM_TYPES, ext.toLowerCase());
     }
 }
