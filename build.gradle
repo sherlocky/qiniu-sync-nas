@@ -7,14 +7,6 @@ apply plugin: 'io.spring.dependency-management'
 
 group = 'com.sherlocky'
 version = application_version
-//mainClassName = 'com.sherlocky.ghost.GhostEsApplication'
-
-/*
-jar {
-    baseName = "ghost-elasticsearch"
-    version = application_version
-}
-*/
 
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'utf-8'
 sourceCompatibility = '1.8'
@@ -41,6 +33,7 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.8.1'
     implementation 'commons-io:commons-io:2.6'
     implementation 'commons-collections:commons-collections:3.2.2'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.9'
 
     compileOnly 'org.projectlombok:lombok'
 

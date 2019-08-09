@@ -1,6 +1,5 @@
 package com.sherlocky.qiniusyncnas.qiniu.config;
 
-import com.sherlocky.qiniusyncnas.qiniu.constant.QiNiuConstants;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -25,10 +24,10 @@ public class QiNiuProperties {
      */
     private String bucketName;
     /**
-     * 存储空间CDN 协议
-     * http or https, 默认 https
+     * 是否开启图片瘦身
      */
-    private String cdnSchema = QiNiuConstants.DEFAULT_SCHEMA;
+    private boolean cdnPhotoSlim;
+
     /**
      * 一般设置为cdn
      */
@@ -66,11 +65,11 @@ public class QiNiuProperties {
         this.cdnPrefix = cdnPrefix;
     }
 
-    public String getCdnSchema() {
-        return cdnSchema;
+    public boolean isCdnPhotoSlim() {
+        return cdnPhotoSlim;
     }
 
-    public void setCdnSchema(String cdnSchema) {
-        this.cdnSchema = cdnSchema;
+    public void setCdnPhotoSlim(boolean cdnPhotoSlim) {
+        this.cdnPhotoSlim = cdnPhotoSlim;
     }
 }

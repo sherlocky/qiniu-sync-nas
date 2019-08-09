@@ -5,8 +5,6 @@ package com.sherlocky.qiniusyncnas.constant;
  * @date: 2019/6/15 21:20
  */
 public abstract class QiniuSyncNasConstants {
-    /** 默认协议 */
-    public static final String NO_CHECK_FILE_TYPES = "jpg,jpeg,png";
     /** 文件校验结果 */
     public enum CheckResult {
         /** 已存在 */

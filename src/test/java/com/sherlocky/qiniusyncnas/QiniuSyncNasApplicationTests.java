@@ -98,7 +98,12 @@ public class QiniuSyncNasApplicationTests {
         //fileKey = "static/autoc/js/autoc.min.js";
         //filePutTime = 14608713791557831L;
 
+        fileKey = "0/90/73d58da3592f5ada5d5f690061145.jpg";
+        fileSize = 2198680;
+        filePutTime = 14598736966795381L;
+
         String downloadUrl = qiniuService.getDownloadUrl(fileKey);
+        System.out.println(downloadUrl);
         boolean isSuccess = QiniuFileUtils.downloadFile(downloadUrl, fileKey, fileSize, filePutTime);
         System.out.println("下载成功~" + QiniuFileUtils.getFilePath(fileKey));
     }
