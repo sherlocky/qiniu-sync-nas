@@ -14,15 +14,12 @@ public class QiNiuCondition implements Condition {
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
         Environment env = context.getEnvironment();
-        String cdnSchema = env.getProperty("qiniu.cdn-schema");
         if (StringUtils.isEmpty(env.getProperty("qiniu.access-key"))) {
             throw new RuntimeException("Lack of qiniuyun configuration: qiniu.access-key");
         } else if (StringUtils.isEmpty(env.getProperty("qiniu.secret-key"))) {
             throw new RuntimeException("Lack of qiniuyun configuration: qiniu.secret-key");
         } else if (StringUtils.isEmpty(env.getProperty("qiniu.bucket-name"))) {
             throw new RuntimeException("Lack of qiniuyun configuration: qiniu.bucket-name");
-        } else if (cdnSchema != null && !"http".equals(cdnSchema) && !"https".equals(cdnSchema)) {
-            throw new RuntimeException("Unsupported schema [" + cdnSchema + "] of qiniuyun configuration: qiniu.cdn-schema");
         } else {
             return true;
         }
