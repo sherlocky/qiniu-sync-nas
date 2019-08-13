@@ -15,6 +15,9 @@
 
     <property name="log_pattern_old" value="#${app_name}# [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%-5level] [%logger:%line] --%mdc{client} %msg%n"/>
     <!-- 可参考：spring-boot.jar!/org/springframework/boot/logging/logback/defaults.xml -->
+	<!-- https://logback.qos.ch/manual/layouts.html#coloring 彩色日志另一种写法，举个例子
+	<pattern>%yellow(%date{yyyy-MM-dd HH:mm:ss}) |%highlight(%-5level)  |%green(%logger:%line) |%black(%msg%n)</pattern>		
+	-->
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
     <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
     <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
