@@ -4,6 +4,7 @@ import com.sherlocky.qiniusyncnas.constant.QiniuSyncNasConstants.CheckResult;
 import com.sherlocky.qiniusyncnas.qiniu.config.QiNiuProperties;
 import com.sherlocky.qiniusyncnas.qiniu.constant.QiNiuConstants;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -190,6 +191,7 @@ public class QiniuFileUtils {
                 try {
                     in = entity.getContent();
                     out = new FileOutputStream(destFile);
+                    FileUtils.forceMkdirParent(destFile);
                     IOUtils.copy(in, out);
                     EntityUtils.consume(entity);
                 } catch (IOException e) {
@@ -243,7 +245,7 @@ public class QiniuFileUtils {
             return CheckResult.EMPTY;
         }
          // 非图片瘦身类型才需要校验大小
-         boolean needCheckSize = !isSlimType(relFilePath);
+         boolean needCheckSize = !isSlimType(relFilePath, null);
          // 需要校验大小的，大小相等即为相同文件，不等即为过期文件
          if (needCheckSize) {
          return destFile.length() == fileSize ? CheckResult.EXISTS : CheckResult.EXPIRED;
@@ -257,11 +259,14 @@ public class QiniuFileUtils {
     /**
      * 文件是否属于图片瘦身类型
      * @param fileKey
+     * @param mimeType
      * @return
      */
-    public static boolean isSlimType(String fileKey) {
+    public static boolean isSlimType(String fileKey, String mimeType) {
         Assert.notNull(fileKey, "$$$ 文件 key 不能为 null！");
         String ext = FilenameUtils.getExtension(fileKey);
-        return ArrayUtils.contains(QiNiuConstants.CDN_PHOTO_SLIM_TYPES, ext.toLowerCase());
+        return ArrayUtils.contains(QiNiuConstants.CDN_PHOTO_SLIM_TYPES, ext.toLowerCase())
+        || (StringUtils.isNotBlank(mimeType)
+                && ArrayUtils.contains(QiNiuConstants.CDN_PHOTO_SLIM_MIME_TYPES, mimeType));
     }
 }

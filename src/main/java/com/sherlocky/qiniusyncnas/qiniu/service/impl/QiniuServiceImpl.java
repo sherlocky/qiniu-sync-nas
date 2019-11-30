@@ -111,7 +111,7 @@ public class QiniuServiceImpl implements IQiniuService {
     }
 
     @Override
-    public String getDownloadUrl(String fileKey) {
+    public String getDownloadUrl(String fileKey, String mimeType) {
         String domain = this.getDomain();
         Assert.notNull(domain, "$$$ 外链域名不能为 null！");
         Assert.notNull(fileKey, "$$$ 文件 key 不能为 null！");
@@ -137,7 +137,7 @@ public class QiniuServiceImpl implements IQiniuService {
             /**
              * 如果是空间开启了图片瘦身，需要从七牛的下载源站代理下载才能得到原图
              */
-            if (qiNiuProperties.isCdnPhotoSlim() && QiniuFileUtils.isSlimType(fileKey)) {
+            if (qiNiuProperties.isCdnPhotoSlim() && QiniuFileUtils.isSlimType(fileKey, mimeType)) {
                 return getSlimDownloadUrl(bi, domain, encodedFileKey);
             }
             return publicUrl;
