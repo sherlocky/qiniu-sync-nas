@@ -106,7 +106,7 @@ public class QiniuSyncNasApplicationTests {
         fileSize = 43453;
         filePutTime = 15680943262407266L;
 
-        String downloadUrl = qiniuService.getDownloadUrl(fileKey, null);
+        String downloadUrl = qiniuService.getDownloadUrl(fileKey);
         System.out.println(downloadUrl);
         boolean isSuccess = QiniuFileUtils.downloadFile(downloadUrl, fileKey, fileSize, filePutTime);
         System.out.println("下载成功~" + QiniuFileUtils.getFilePath(fileKey));

@@ -92,7 +92,7 @@ public class QiniuSyncNasService {
         if (log.isDebugEnabled()) {
             log.debug(JSON.toJSONString(fileInfo));
         }
-        String fileDownloadUrl = qiniuService.getDownloadUrl(fileInfo.key, fileInfo.mimeType);
+        String fileDownloadUrl = qiniuService.getDownloadUrl(fileInfo.key);
         if (StringUtils.isBlank(fileDownloadUrl)) {
             log.error("$$$ 文件下载地址为空，下载失败！");
             return false;

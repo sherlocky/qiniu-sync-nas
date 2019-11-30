@@ -251,7 +251,7 @@ public class QiniuFileUtils {
             return CheckResult.EMPTY;
         }
          // 非图片瘦身类型才需要校验大小
-         boolean needCheckSize = !isSlimType(relFilePath, null);
+         boolean needCheckSize = !isSlimType(relFilePath);
          // 需要校验大小的，大小相等即为相同文件，不等即为过期文件
          if (needCheckSize) {
          return destFile.length() == fileSize ? CheckResult.EXISTS : CheckResult.EXPIRED;
@@ -265,14 +265,11 @@ public class QiniuFileUtils {
     /**
      * 文件是否属于图片瘦身类型
      * @param fileKey
-     * @param mimeType
      * @return
      */
-    public static boolean isSlimType(String fileKey, String mimeType) {
+    public static boolean isSlimType(String fileKey) {
         Assert.notNull(fileKey, "$$$ 文件 key 不能为 null！");
         String ext = FilenameUtils.getExtension(fileKey);
-        return ArrayUtils.contains(QiNiuConstants.CDN_PHOTO_SLIM_TYPES, ext.toLowerCase())
-        || (StringUtils.isNotBlank(mimeType)
-                && ArrayUtils.contains(QiNiuConstants.CDN_PHOTO_SLIM_MIME_TYPES, mimeType));
+        return ArrayUtils.contains(QiNiuConstants.CDN_PHOTO_SLIM_TYPES, ext.toLowerCase());
     }
 }

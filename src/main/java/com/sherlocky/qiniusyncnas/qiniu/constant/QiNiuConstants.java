@@ -12,8 +12,6 @@ public abstract class QiNiuConstants {
     public static final String SCHEMA_SEPARATOR = "://";
     /** 七牛cdn图片瘦身默认支持的图片类型 */
     public static final String[] CDN_PHOTO_SLIM_TYPES = new String[]{"jpg", "jpeg", "png"};
-    /** 七牛cdn图片瘦身默认支持的图片mime类型 */
-    public static final String[] CDN_PHOTO_SLIM_MIME_TYPES = new String[]{"image/jpeg", "image/png"};
 
     /** bucket空间是否私有标识(0:公开 1:私有)*/
     public static final int BUCKET_PUBLIC = 0;

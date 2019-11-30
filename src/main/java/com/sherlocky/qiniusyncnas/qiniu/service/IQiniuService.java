@@ -72,10 +72,9 @@ public interface IQiniuService {
      * 获取文件下载路径
      *
      * @param fileKey 文件相对路径
-     * @param mimeType 文件mimeType
      * @return
      */
-    String getDownloadUrl(String fileKey, String mimeType);
+    String getDownloadUrl(String fileKey);
 
     /**
      * 获取上传token
