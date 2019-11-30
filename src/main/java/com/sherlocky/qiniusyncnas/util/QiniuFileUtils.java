@@ -109,6 +109,13 @@ public class QiniuFileUtils {
             return true;
         }
         File destFile = new File(destFilePath);
+        // 手动创建一下 目标文件所在文件夹
+        try {
+            FileUtils.forceMkdirParent(destFile);
+        } catch (IOException e) {
+            log.error("$$$ 文件下载失败，目标文件所在目录创建失败：" + destFilePath);
+            return false;
+        }
         // 过期或者下载失败的空文件 先删除掉
         if (CheckResult.EMPTY == result || CheckResult.EXPIRED == result) {
             boolean deleted = org.apache.commons.io.FileUtils.deleteQuietly(destFile);
@@ -191,7 +198,6 @@ public class QiniuFileUtils {
                 try {
                     in = entity.getContent();
                     out = new FileOutputStream(destFile);
-                    FileUtils.forceMkdirParent(destFile);
                     IOUtils.copy(in, out);
                     EntityUtils.consume(entity);
                 } catch (IOException e) {
