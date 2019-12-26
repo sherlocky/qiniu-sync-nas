@@ -71,7 +71,7 @@ public interface IQiniuService {
     /**
      * 获取文件下载路径
      *
-     * @param fileKey
+     * @param fileKey 文件相对路径
      * @return
      */
     String getDownloadUrl(String fileKey);

@@ -4,6 +4,7 @@ import com.sherlocky.qiniusyncnas.constant.QiniuSyncNasConstants.CheckResult;
 import com.sherlocky.qiniusyncnas.qiniu.config.QiNiuProperties;
 import com.sherlocky.qiniusyncnas.qiniu.constant.QiNiuConstants;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -108,6 +109,13 @@ public class QiniuFileUtils {
             return true;
         }
         File destFile = new File(destFilePath);
+        // 手动创建一下 目标文件所在文件夹
+        try {
+            FileUtils.forceMkdirParent(destFile);
+        } catch (IOException e) {
+            log.error("$$$ 文件下载失败，目标文件所在目录创建失败：" + destFilePath);
+            return false;
+        }
         // 过期或者下载失败的空文件 先删除掉
         if (CheckResult.EMPTY == result || CheckResult.EXPIRED == result) {
             boolean deleted = org.apache.commons.io.FileUtils.deleteQuietly(destFile);

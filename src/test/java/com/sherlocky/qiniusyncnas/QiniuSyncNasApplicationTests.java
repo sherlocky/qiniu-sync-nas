@@ -51,7 +51,7 @@ public class QiniuSyncNasApplicationTests {
     @Test
     public void testListFiles() {
         //文件名前缀
-        String prefix = null;//"backup/db/db_ghost-blog-new-";
+        String prefix = null;//""f/c9/";//"backup/db/db_ghost-blog-new-";
         //每次迭代的长度限制，推荐值 10000
         int limit = 100;
         //指定目录分隔符，列出所有公共前缀（模拟列出目录效果）。缺省值为空字符串
@@ -62,7 +62,7 @@ public class QiniuSyncNasApplicationTests {
         boolean isEOF = false;
         try {
             while (!isEOF) {
-                fl = qiniuService.listFile(prefix, marker, limit, delimiter);
+                fl = qiniuService.listFile(prefix, marker, 300, delimiter);
                 isEOF = fl.isEOF();
                 marker = fl.marker;
                 System.out.println(JSON.toJSONString(fl));
@@ -101,6 +101,10 @@ public class QiniuSyncNasApplicationTests {
         fileKey = "0/90/73d58da3592f5ada5d5f690061145.jpg";
         fileSize = 2198680;
         filePutTime = 14598736966795381L;
+
+        fileKey = "f/c9/77aeadb43ef29dd86aca81337a8a4.png";
+        fileSize = 43453;
+        filePutTime = 15680943262407266L;
 
         String downloadUrl = qiniuService.getDownloadUrl(fileKey);
         System.out.println(downloadUrl);
