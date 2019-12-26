@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.qiniu.common.QiniuException;
 import com.qiniu.storage.model.FileInfo;
 import com.qiniu.storage.model.FileListing;
+import com.sherlocky.common.util.MessagePushUtils;
 import com.sherlocky.qiniusyncnas.entity.SyncResult;
 import com.sherlocky.qiniusyncnas.qiniu.config.QiNiuProperties;
 import com.sherlocky.qiniusyncnas.qiniu.service.IQiniuService;
@@ -37,6 +38,8 @@ public class QiniuSyncNasService {
     private Integer limit;
     @Value("${sync.qiniu.delimiter:}")
     private String delimiter;
+    @Value("${serverchan.sckey}")
+    private String serverchanSckey;
 
     /** 同步操作计数 */
     private static AtomicInteger syncCount = new AtomicInteger(0);
@@ -67,11 +70,28 @@ public class QiniuSyncNasService {
         } catch (QiniuException e) {
             log.error("$$$$$$ 从七牛获取空间文件列表失败", e);
         }
-        log.error(JSON.toJSONString(qiNiuProperties));
-        log.error("### 当前存储空间共有 " + totalCount + " 个文件，本次成功同步了 " + successCount + " 个~");
+        if (log.isDebugEnabled()) {
+            log.debug(JSON.toJSONString(qiNiuProperties));
+        }
+        if (log.isInfoEnabled()) {
+            log.info("### 当前存储空间共有 " + totalCount + " 个文件，本次成功同步了 " + successCount + " 个~");
+        }
+        sendSyncMessage(totalCount, successCount);
         // 同步结束：归0
         syncCount.set(0);
         return new SyncResult(totalCount, successCount);
+    }
+
+    /**
+     * 推送同步结果消息（有失败的才推送）
+     * @param totalCount
+     * @param successCount
+     */
+    private void sendSyncMessage(long totalCount, long successCount) {
+        if (StringUtils.isNotBlank(serverchanSckey) && totalCount > successCount) {
+            MessagePushUtils.push(serverchanSckey, "七牛文件同步到NAS异常",
+                    String.format("当前存储空间共有 %d 个文件，本次成功同步了 %d 个", totalCount, successCount));
+        }
     }
 
     private long handleSync(FileListing fileListing) {

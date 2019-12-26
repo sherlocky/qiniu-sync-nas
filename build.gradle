@@ -1,6 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.1.6.RELEASE'
     id 'java'
+    id 'java-library'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -16,9 +17,16 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    all {
+        // 暂不缓存 SNAPSHOT版本)
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
 }
 
 repositories {
+    maven {
+        url oss_sonatype_snapshot_maven_url
+    }
     maven {
         url maven_url
     }
@@ -34,9 +42,9 @@ dependencies {
     implementation 'commons-io:commons-io:2.6'
     implementation 'commons-collections:commons-collections:3.2.2'
     implementation 'org.apache.httpcomponents:httpclient:4.5.9'
-
+    implementation 'com.sherlocky:sherlocky-commons:0.2.0-SNAPSHOT'
+    // lombok
     compileOnly 'org.projectlombok:lombok'
-
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
